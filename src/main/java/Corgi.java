@@ -54,14 +54,16 @@ public class Corgi {
         System.out.println(indent + partition);
     }
 
-    public static void corgiGuide() {
-        corgiPrint("Incomplete command. Please refer to this guide:\n"
-        + "-- todo <task_name>: add a task to the list\n"
-        + "-- list: show list of tasks\n"
-        + "-- mark <task_number>: mark a task\n"
-        + "-- unmark <task_number>: unmark a task\n"
-        + "-- deadline <task_name> /by <date>: create a task with deadline\n"
-        + "-- event <event_name> /from <start_date_time> /to <end_date_time>: create an event \n");
+    private static void corgiGuide() {
+        corgiPrint("""
+            Incomplete command. Please refer to this guide:
+            -- todo <task_name>: add a task to the list
+            -- list: show list of tasks
+            -- mark <task_number>: mark a task as done
+            -- unmark <task_number>: unmark a task
+            -- deadline <task_name> /by <date>: create a task with a deadline
+            -- event <event_name> /from <start_date_time> /to <end_date_time>: create an event
+        """);
     }
 
     public static void listTask() {
@@ -75,38 +77,39 @@ public class Corgi {
     public static void addTask(String input) {
         ToDo task = new ToDo(input);
         tasks.add(task);
-        corgiPrint("Added:\n"
-        + indent + task.getStatusIcon() +"\n"
-        + indent + "You have " + tasks.size() + " tasks in the list\n");
+
+        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+                indent, task.getStatusIcon(), indent, tasks.size()));
     }
 
     public static void addDeadline(String input) {
         int idx = input.indexOf("/by");
+
         String deadlineName = input.substring(0, idx).trim();
         // split the input into two parts (by and ...)
         String deadlineTime = input.substring(idx + 1).trim().split(" ", 2)[1];
 
         Deadline deadline = new Deadline(deadlineName, deadlineTime);
         tasks.add(deadline);
-        corgiPrint("Added:\n"
-        + indent + deadline.getStatusIcon() +"\n"
-        + indent + "You have " + tasks.size() + " tasks in the list\n");
+
+        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+        indent, deadline.getStatusIcon(), indent, tasks.size()));
     }
 
     public static void addEvent(String input) {
         int idx_start = input.indexOf("/from");
         int idx_end = input.indexOf("/to");
+
         String eventName = input.substring(0, idx_start).trim();
         String eventStartTime = input.substring(idx_start + 1, idx_end).trim();
         eventStartTime = eventStartTime.split(" ")[1];
-        // split the input into two parts (by and ...)
         String eventEndTime = input.substring(idx_end).split(" ", 2)[1];
 
         Event event = new Event(eventName, eventStartTime, eventEndTime);
         tasks.add(event);
-        corgiPrint("Added:\n"
-                + indent + event.getStatusIcon() +"\n"
-                + indent + "You have " + tasks.size() + " tasks in the list\n");
+
+        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+        indent, event.getStatusIcon(), indent, tasks.size()));
     }
 
     public static void markTask(String input) {
