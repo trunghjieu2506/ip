@@ -1,6 +1,8 @@
+package CorgiManager.task;
+
 public class Task {
     protected String name;
-    protected boolean isDone;
+    public boolean isDone;
 
     public Task(String name) {
         this.name = name;

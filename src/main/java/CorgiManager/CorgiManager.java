@@ -1,14 +1,27 @@
+package CorgiManager;
+
+import CorgiManager.command.CommandHandler;
+import CorgiManager.exception.InvalidCommandException;
+import CorgiManager.exception.MarkingOutOfBoundException;
+import CorgiManager.exception.MissingArgumentException;
+import CorgiManager.task.Deadline;
+import CorgiManager.task.Event;
+import CorgiManager.task.Task;
+import CorgiManager.task.ToDo;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class CorgiManager {
     public static final String partition = "************************************************************************";
     public static final String indent = "     ";
 
+    //create a hashmap to map commands to respective methods
+    // CommandHandler is a functional interface to handle throwing exception for lambda function of COMMANDS hashtable
     public static final Map<String, CommandHandler> COMMANDS = new HashMap<>();
+
     // initialize commands
     static {
         COMMANDS.put("bye", input -> corgiPrint("Bye. Hope to see you again soon!"));
@@ -17,28 +30,35 @@ public class CorgiManager {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'todo' command");
             }
-            addTask(input[1]);});
+            addTask(input[1]);
+        });
         COMMANDS.put("deadline", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'deadline' command");
             }
-            addDeadline(input[1]);});
+            addDeadline(input[1]);
+        });
         COMMANDS.put("event", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'event' command");
             }
-            addEvent(input[1]);});
+            addEvent(input[1]);
+        });
         COMMANDS.put("mark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'mark' command");
             }
-            markTask(input[1]);});
+            markTask(input[1]);
+        });
         COMMANDS.put("unmark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'unmark' command");
             }
-            unmarkTask(input[1]);});
+            unmarkTask(input[1]);
+        });
     }
+
+    //tasks is used to store Task objects created by user
     public static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -48,13 +68,15 @@ public class CorgiManager {
         System.out.println(partition);
 
         Scanner scanner = new Scanner(System.in);
-        String input;
 
         while (true) {
-            input = scanner.nextLine().trim();
+            String input = scanner.nextLine().trim();
             String[] command = input.split(" ", 2);
+
+            //Handle checked exceptions
             try {
                 if (COMMANDS.containsKey(command[0])) {
+                    //handle method is defined in CommandHandler
                     COMMANDS.get(command[0]).handle(command);
                     if (command[0].equalsIgnoreCase("bye")) {
                         break;
@@ -63,42 +85,16 @@ public class CorgiManager {
                     throw new InvalidCommandException("Command does not exist!!");
                 }
             } catch (MissingArgumentException e) {
+                //System.err.println might be better
                 corgiPrint(e.getMessage());
             } catch (InvalidCommandException e) {
                 corgiPrint(e.getMessage());
                 corgiGuide();
             }
         }
-
-
-//            if (input.equalsIgnoreCase("bye")) {
-//                corgiPrint("Bye. Hope to see you again soon!");
-//                break;
-//            }
-//            else if (input.equalsIgnoreCase("list")) {
-//                listTask();
-//            }
-//            else if (input.startsWith("mark")) {
-//                markTask(parts[1]);
-//            }
-//            else if (input.startsWith("unmark")) {
-//                unmarkTask(parts[1]);
-//            }
-//            else if (input.startsWith("todo")) {
-//                addTask(parts[1]);
-//            }
-//            else if (input.startsWith("deadline")) {
-//                addDeadline(parts[1]);
-//            }
-//            else if (input.startsWith("event")) {
-//                addEvent(parts[1]);
-//            }
-//            else {
-//                corgiGuide();
-//            }
-//        }
     }
 
+    // corgi-style formatting
     public static void corgiPrint(String input) {
         System.out.println(indent + partition);
         System.out.println(indent + input);
@@ -107,14 +103,14 @@ public class CorgiManager {
 
     private static void corgiGuide() {
         corgiPrint("""
-            How to Corgi:
-            -- todo <task_name>: add a task to the list
-            -- list: show list of tasks
-            -- mark <task_number>: mark a task as done
-            -- unmark <task_number>: unmark a task
-            -- deadline <task_name> /by <date>: create a task with a deadline
-            -- event <event_name> /from <start_date_time> /to <end_date_time>: create an event
-        """);
+                    How to Corgi:
+                    -- todo <task_name>: add a task to the list
+                    -- list: show list of tasks
+                    -- mark <task_number>: mark a task as done
+                    -- unmark <task_number>: unmark a task
+                    -- deadline <task_name> /by <date>: create a task with a deadline
+                    -- event <event_name> /from <start_date_time> /to <end_date_time>: create an event
+                """);
     }
 
     public static void listTask() {
@@ -125,7 +121,7 @@ public class CorgiManager {
         System.out.println(indent + partition);
     }
 
-    public static void addTask(String input){
+    public static void addTask(String input) {
         ToDo task = new ToDo(input);
         tasks.add(task);
 
@@ -134,6 +130,7 @@ public class CorgiManager {
     }
 
     public static void addDeadline(String input) {
+        // handle unchecked exceptions
         try {
             int idx = input.indexOf("/by");
             String deadlineName = input.substring(0, idx).trim();
@@ -145,13 +142,14 @@ public class CorgiManager {
 
             corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
                     indent, deadline.getStatusIcon(), indent, tasks.size()));
-        } catch(IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             corgiPrint("Incorrect command format");
             corgiGuide();
         }
     }
 
     public static void addEvent(String input) {
+        // handle unchecked exceptions
         try {
             int idxStart = input.indexOf("/from");
             int idxEnd = input.indexOf("/to");
@@ -172,34 +170,34 @@ public class CorgiManager {
         }
     }
 
-    public static void markTask(String input) {
+    public static void markTask(String input){
+        // handle unchecked exceptions
         try {
             int taskIndex = Integer.parseInt(input) - 1;
-            if (taskIndex >= 0 && taskIndex <= tasks.size()) {
-                tasks.get(taskIndex).isDone = true;
-                corgiPrint("Nice. I 've marked this task as done:\n"
-                        + indent + tasks.get(taskIndex).getStatusIcon());
-            } else {
-                corgiPrint("Sorry, but you are out of bounds!");
-            }
+            tasks.get(taskIndex).isDone = true;
+            corgiPrint("Nice. I 've marked this task as done:\n"
+                    + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
             corgiPrint("Incorrect command format");
+            corgiGuide();
+        } catch (IndexOutOfBoundsException e) {
+            corgiPrint("There is no task with id: " + input);
             corgiGuide();
         }
     }
 
-    public static void unmarkTask(String input) {
+    public static void unmarkTask(String input){
+        // handle unchecked exceptions
         try {
             int taskIndex = Integer.parseInt(input) - 1;
-            if (taskIndex >= 0 && taskIndex <= tasks.size()) {
-                tasks.get(taskIndex).isDone = false;
-                corgiPrint("Okay. I 've marked this task as undone:\n"
-                        + indent + tasks.get(taskIndex).getStatusIcon());
-            } else {
-                System.out.println("Sorry, but you are out of bounds!");
-            }
+            tasks.get(taskIndex).isDone = false;
+            corgiPrint("Okay. I 've marked this task as undone:\n"
+                    + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
             corgiPrint("Incorrect command format");
+            corgiGuide();
+        } catch (IndexOutOfBoundsException e) {
+            corgiPrint("There is no task with id: " + input);
             corgiGuide();
         }
     }
