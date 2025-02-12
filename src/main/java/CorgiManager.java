@@ -1,10 +1,44 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
-public class Corgi {
-    public static String partition = "************************";
-    public static String indent = "     ";
+public class CorgiManager {
+    public static final String partition = "************************************************************************";
+    public static final String indent = "     ";
 
+    public static final Map<String, CommandHandler> COMMANDS = new HashMap<>();
+    // initialize commands
+    static {
+        COMMANDS.put("bye", input -> corgiPrint("Bye. Hope to see you again soon!"));
+        COMMANDS.put("list", input -> listTask());
+        COMMANDS.put("todo", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'todo' command");
+            }
+            addTask(input);});
+        COMMANDS.put("deadline", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'deadline' command");
+            }
+            addTask(input);});
+        COMMANDS.put("event", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'event' command");
+            }
+            addTask(input);});
+        COMMANDS.put("mark", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'mark' command");
+            }
+            addTask(input);});
+        COMMANDS.put("unmark", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'unmark' command");
+            }
+            addTask(input);});
+    }
     public static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -18,34 +52,51 @@ public class Corgi {
 
         while (true) {
             input = scanner.nextLine().trim();
-            String[] parts = input.split(" ", 2);
-
-            if (input.equalsIgnoreCase("bye")) {
-                corgiPrint("Bye. Hope to see you again soon!");
-                break;
-            }
-            else if (input.equalsIgnoreCase("list")) {
-                listTask();
-            }
-            else if (input.startsWith("mark")) {
-                markTask(parts[1]);
-            }
-            else if (input.startsWith("unmark")) {
-                unmarkTask(parts[1]);
-            }
-            else if (input.startsWith("todo")) {
-                addTask(parts[1]);
-            }
-            else if (input.startsWith("deadline")) {
-                addDeadline(parts[1]);
-            }
-            else if (input.startsWith("event")) {
-                addEvent(parts[1]);
-            }
-            else {
+            String[] command = input.split(" ", 2);
+            try {
+                if (COMMANDS.containsKey(command[0])) {
+                    COMMANDS.get(command[0]).handle(command);
+                    if (command[0].equalsIgnoreCase("bye")) {
+                        break;
+                    }
+                } else {
+                    throw new InvalidCommandException("Command does not exist!!");
+                }
+            } catch (MissingArgumentException e) {
+                corgiPrint(e.getMessage());
+            } catch (InvalidCommandException e) {
+                corgiPrint(e.getMessage());
                 corgiGuide();
             }
         }
+
+
+//            if (input.equalsIgnoreCase("bye")) {
+//                corgiPrint("Bye. Hope to see you again soon!");
+//                break;
+//            }
+//            else if (input.equalsIgnoreCase("list")) {
+//                listTask();
+//            }
+//            else if (input.startsWith("mark")) {
+//                markTask(parts[1]);
+//            }
+//            else if (input.startsWith("unmark")) {
+//                unmarkTask(parts[1]);
+//            }
+//            else if (input.startsWith("todo")) {
+//                addTask(parts[1]);
+//            }
+//            else if (input.startsWith("deadline")) {
+//                addDeadline(parts[1]);
+//            }
+//            else if (input.startsWith("event")) {
+//                addEvent(parts[1]);
+//            }
+//            else {
+//                corgiGuide();
+//            }
+//        }
     }
 
     public static void corgiPrint(String input) {
@@ -56,7 +107,7 @@ public class Corgi {
 
     private static void corgiGuide() {
         corgiPrint("""
-            Incomplete command. Please refer to this guide:
+            How to Corgi:
             -- todo <task_name>: add a task to the list
             -- list: show list of tasks
             -- mark <task_number>: mark a task as done
@@ -74,8 +125,8 @@ public class Corgi {
         System.out.println(indent + partition);
     }
 
-    public static void addTask(String input) {
-        ToDo task = new ToDo(input);
+    public static void addTask(String[] input){
+        ToDo task = new ToDo(input[1]);
         tasks.add(task);
 
         corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
@@ -97,13 +148,13 @@ public class Corgi {
     }
 
     public static void addEvent(String input) {
-        int idx_start = input.indexOf("/from");
-        int idx_end = input.indexOf("/to");
+        int idxStart = input.indexOf("/from");
+        int idxEnd = input.indexOf("/to");
 
-        String eventName = input.substring(0, idx_start).trim();
-        String eventStartTime = input.substring(idx_start + 1, idx_end).trim();
+        String eventName = input.substring(0, idxStart).trim();
+        String eventStartTime = input.substring(idxStart + 1, idxEnd).trim();
         eventStartTime = eventStartTime.split(" ")[1];
-        String eventEndTime = input.substring(idx_end).split(" ", 2)[1];
+        String eventEndTime = input.substring(idxEnd).split(" ", 2)[1];
 
         Event event = new Event(eventName, eventStartTime, eventEndTime);
         tasks.add(event);
