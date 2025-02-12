@@ -2,7 +2,6 @@ package CorgiManager;
 
 import CorgiManager.command.CommandHandler;
 import CorgiManager.exception.InvalidCommandException;
-import CorgiManager.exception.MarkingOutOfBoundException;
 import CorgiManager.exception.MissingArgumentException;
 import CorgiManager.task.Deadline;
 import CorgiManager.task.Event;
