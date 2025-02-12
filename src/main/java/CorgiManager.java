@@ -17,27 +17,27 @@ public class CorgiManager {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'todo' command");
             }
-            addTask(input);});
+            addTask(input[1]);});
         COMMANDS.put("deadline", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'deadline' command");
             }
-            addTask(input);});
+            addDeadline(input[1]);});
         COMMANDS.put("event", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'event' command");
             }
-            addTask(input);});
+            addEvent(input[1]);});
         COMMANDS.put("mark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'mark' command");
             }
-            addTask(input);});
+            markTask(input[1]);});
         COMMANDS.put("unmark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'unmark' command");
             }
-            addTask(input);});
+            unmarkTask(input[1]);});
     }
     public static ArrayList<Task> tasks = new ArrayList<>();
 
@@ -125,8 +125,8 @@ public class CorgiManager {
         System.out.println(indent + partition);
     }
 
-    public static void addTask(String[] input){
-        ToDo task = new ToDo(input[1]);
+    public static void addTask(String input){
+        ToDo task = new ToDo(input);
         tasks.add(task);
 
         corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
@@ -134,41 +134,46 @@ public class CorgiManager {
     }
 
     public static void addDeadline(String input) {
-        int idx = input.indexOf("/by");
+        try {
+            int idx = input.indexOf("/by");
+            String deadlineName = input.substring(0, idx).trim();
+            // split the input into two parts (by and ...)
+            String deadlineTime = input.substring(idx + 1).trim().split(" ", 2)[1];
 
-        String deadlineName = input.substring(0, idx).trim();
-        // split the input into two parts (by and ...)
-        String deadlineTime = input.substring(idx + 1).trim().split(" ", 2)[1];
+            Deadline deadline = new Deadline(deadlineName, deadlineTime);
+            tasks.add(deadline);
 
-        Deadline deadline = new Deadline(deadlineName, deadlineTime);
-        tasks.add(deadline);
-
-        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
-        indent, deadline.getStatusIcon(), indent, tasks.size()));
+            corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+                    indent, deadline.getStatusIcon(), indent, tasks.size()));
+        } catch(IndexOutOfBoundsException e) {
+            corgiPrint("Incorrect command format");
+            corgiGuide();
+        }
     }
 
     public static void addEvent(String input) {
-        int idxStart = input.indexOf("/from");
-        int idxEnd = input.indexOf("/to");
+        try {
+            int idxStart = input.indexOf("/from");
+            int idxEnd = input.indexOf("/to");
 
-        String eventName = input.substring(0, idxStart).trim();
-        String eventStartTime = input.substring(idxStart + 1, idxEnd).trim();
-        eventStartTime = eventStartTime.split(" ")[1];
-        String eventEndTime = input.substring(idxEnd).split(" ", 2)[1];
+            String eventName = input.substring(0, idxStart).trim();
+            String eventStartTime = input.substring(idxStart + 1, idxEnd).trim();
+            eventStartTime = eventStartTime.split(" ")[1];
+            String eventEndTime = input.substring(idxEnd).split(" ", 2)[1];
 
-        Event event = new Event(eventName, eventStartTime, eventEndTime);
-        tasks.add(event);
+            Event event = new Event(eventName, eventStartTime, eventEndTime);
+            tasks.add(event);
 
-        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
-        indent, event.getStatusIcon(), indent, tasks.size()));
+            corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+                    indent, event.getStatusIcon(), indent, tasks.size()));
+        } catch (IndexOutOfBoundsException e) {
+            corgiPrint("Incorrect command format");
+            corgiGuide();
+        }
     }
 
     public static void markTask(String input) {
-        if (!(input.split(" ").length == 1)) {
-            // if the command line is incorrect, provide guide
-            corgiGuide();
-        }
-        else {
+        try {
             int taskIndex = Integer.parseInt(input) - 1;
             if (taskIndex >= 0 && taskIndex <= tasks.size()) {
                 tasks.get(taskIndex).isDone = true;
@@ -177,14 +182,14 @@ public class CorgiManager {
             } else {
                 corgiPrint("Sorry, but you are out of bounds!");
             }
+        } catch (NumberFormatException e) {
+            corgiPrint("Incorrect command format");
+            corgiGuide();
         }
     }
 
     public static void unmarkTask(String input) {
-        if (!(input.split(" ").length == 1)) {
-            corgiGuide();
-        }
-        else {
+        try {
             int taskIndex = Integer.parseInt(input) - 1;
             if (taskIndex >= 0 && taskIndex <= tasks.size()) {
                 tasks.get(taskIndex).isDone = false;
@@ -193,6 +198,9 @@ public class CorgiManager {
             } else {
                 System.out.println("Sorry, but you are out of bounds!");
             }
+        } catch (NumberFormatException e) {
+            corgiPrint("Incorrect command format");
+            corgiGuide();
         }
     }
 }
