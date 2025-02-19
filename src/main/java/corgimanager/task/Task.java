@@ -1,4 +1,4 @@
-package CorgiManager.task;
+package corgimanager.task;
 
 public class Task {
     protected String name;

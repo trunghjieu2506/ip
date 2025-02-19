@@ -1,4 +1,4 @@
-package CorgiManager.task;
+package corgimanager.task;
 
 public class Deadline extends Task{
     protected String by;

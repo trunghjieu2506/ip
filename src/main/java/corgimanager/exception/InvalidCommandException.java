@@ -1,4 +1,4 @@
-package CorgiManager.exception;
+package corgimanager.exception;
 
 public class InvalidCommandException extends Exception {
     public InvalidCommandException(String message) {
