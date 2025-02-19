@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.*;
 
 public class CorgiManager {
     public static final String partition = "************************************************************************";
     public static final String indent = "     ";
+    private static final String LIST_FILE = "CorgiManager/tasks.dat";
 
     //create a hashmap to map commands to respective methods
     // CommandHandler is a functional interface to handle throwing exception for lambda function of COMMANDS hashtable
@@ -72,6 +74,8 @@ public class CorgiManager {
         System.out.println("What can I do for you?");
         System.out.println(partition);
 
+        loadTasks();
+
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -126,9 +130,33 @@ public class CorgiManager {
         System.out.println(indent + partition);
     }
 
+    public static void saveTasks(){
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(LIST_FILE))) {
+            out.writeObject(tasks);
+            System.out.println("Tasks saved successfully!");
+        } catch (IOException e) {
+            System.err.println("Error saving tasks: " + e.getMessage());
+        }
+    }
+
+    public static void loadTasks(){
+        File file = new File(LIST_FILE);
+        if (!file.exists()) {
+            return;
+        }
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(LIST_FILE))){
+            tasks = (ArrayList<Task>) in.readObject();
+            System.out.println("Here are your tasks:");
+            listTask();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading tasks: " + e.getMessage());
+        }
+    }
+
     public static void addTask(String input) {
         ToDo task = new ToDo(input);
         tasks.add(task);
+        saveTasks();
 
         corgiPrint(String.format("Noted. I've added this task:\n%s%s\n%sYou now have %d tasks in the list.",
                 indent, task.getStatusIcon(), indent, tasks.size()));
@@ -152,6 +180,7 @@ public class CorgiManager {
 
             Deadline deadline = new Deadline(deadlineName, deadlineTime);
             tasks.add(deadline);
+            saveTasks();
 
             corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
                     indent, deadline.getStatusIcon(), indent, tasks.size()));
@@ -174,6 +203,7 @@ public class CorgiManager {
 
             Event event = new Event(eventName, eventStartTime, eventEndTime);
             tasks.add(event);
+            saveTasks();
 
             corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
                     indent, event.getStatusIcon(), indent, tasks.size()));
@@ -187,7 +217,8 @@ public class CorgiManager {
         // handle unchecked exceptions
         try {
             int taskIndex = Integer.parseInt(input) - 1;
-            tasks.get(taskIndex).isDone = true;
+            tasks.get(taskIndex).setDone(true);
+            saveTasks();
             corgiPrint("Nice. I 've marked this task as done:\n"
                     + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
@@ -203,7 +234,8 @@ public class CorgiManager {
         // handle unchecked exceptions
         try {
             int taskIndex = Integer.parseInt(input) - 1;
-            tasks.get(taskIndex).isDone = false;
+            tasks.get(taskIndex).setDone(false);
+            saveTasks();
             corgiPrint("Okay. I 've marked this task as undone:\n"
                     + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
