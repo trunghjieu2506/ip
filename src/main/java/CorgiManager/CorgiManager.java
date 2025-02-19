@@ -13,7 +13,6 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.*;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class CorgiManager {
     public static final String partition = "************************************************************************";
