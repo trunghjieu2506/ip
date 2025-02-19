@@ -1,4 +1,4 @@
-package corgimanager.task;
+package CorgiManager.task;
 
 public class ToDo extends Task{
     private static final long serialVersionUID = 1L;

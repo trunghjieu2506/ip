@@ -1,4 +1,4 @@
-package corgimanager.task;
+package CorgiManager.task;
 
 public class Deadline extends Task{
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
-package corgimanager.command;
-import corgimanager.exception.InvalidCommandException;
-import corgimanager.exception.MissingArgumentException;
+package CorgiManager.command;
+import CorgiManager.exception.InvalidCommandException;
+import CorgiManager.exception.MissingArgumentException;
 
 @FunctionalInterface
 public interface CommandHandler {
