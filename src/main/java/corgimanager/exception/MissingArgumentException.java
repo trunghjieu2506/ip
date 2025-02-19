@@ -1,4 +1,4 @@
-package CorgiManager.exception;
+package corgimanager.exception;
 
 public class MissingArgumentException extends Exception {
     public MissingArgumentException(String message) {

@@ -1,4 +1,4 @@
-package CorgiManager.exception;
+package corgimanager.exception;
 
 public class MarkingOutOfBoundException extends Exception {
     public MarkingOutOfBoundException(String message) {

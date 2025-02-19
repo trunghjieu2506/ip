@@ -1,12 +1,12 @@
-package CorgiManager;
+package corgimanager;
 
-import CorgiManager.command.CommandHandler;
-import CorgiManager.exception.InvalidCommandException;
-import CorgiManager.exception.MissingArgumentException;
-import CorgiManager.task.Deadline;
-import CorgiManager.task.Event;
-import CorgiManager.task.Task;
-import CorgiManager.task.ToDo;
+import corgimanager.command.CommandHandler;
+import corgimanager.exception.InvalidCommandException;
+import corgimanager.exception.MissingArgumentException;
+import corgimanager.task.Deadline;
+import corgimanager.task.Event;
+import corgimanager.task.Task;
+import corgimanager.task.ToDo;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -42,6 +42,12 @@ public class CorgiManager {
                 throw new MissingArgumentException("Missing argument for 'event' command");
             }
             addEvent(input[1]);
+        });
+        COMMANDS.put("delete", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'delete' command");
+            }
+            removeTask(input[1]);
         });
         COMMANDS.put("mark", input -> {
             if (input.length < 2) {
@@ -124,8 +130,16 @@ public class CorgiManager {
         ToDo task = new ToDo(input);
         tasks.add(task);
 
-        corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+        corgiPrint(String.format("Noted. I've added this task:\n%s%s\n%sYou now have %d tasks in the list.",
                 indent, task.getStatusIcon(), indent, tasks.size()));
+    }
+
+    public static void removeTask(String input) {
+        int taskId = Integer.parseInt(input) - 1;
+        Task removedTask = tasks.get(taskId);
+        tasks.remove(taskId);
+        corgiPrint(String.format("Noted. I've removed this task:\n%s%s\n%sYou now have %d tasks in the list.",
+                indent, removedTask.getStatusIcon(), indent, tasks.size()));
     }
 
     public static void addDeadline(String input) {
