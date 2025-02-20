@@ -17,8 +17,8 @@ import java.io.*;
 public class CorgiManager {
     public static final String partition = "************************************************************************";
     public static final String indent = "     ";
-    private static final String LIST_FILE = "CorgiManager/tasks.dat";
-
+    private static final String LIST_FILE = System.getProperty("user.home")
+            + File.separator + ".corgimanager" + File.separator + "tasks.dat"; //create a hidden corgimanager folder in user's home folder
     //create a hashmap to map commands to respective methods
     // CommandHandler is a functional interface to handle throwing exception for lambda function of COMMANDS hashtable
     public static final Map<String, CommandHandler> COMMANDS = new HashMap<>();
@@ -131,7 +131,9 @@ public class CorgiManager {
     }
 
     public static void saveTasks(){
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(LIST_FILE))) {
+        File file = new File(LIST_FILE);
+        file.getParentFile().mkdirs();
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(tasks);
             System.out.println("Tasks saved successfully!");
         } catch (IOException e) {
@@ -141,6 +143,7 @@ public class CorgiManager {
 
     public static void loadTasks(){
         File file = new File(LIST_FILE);
+        file.getParentFile().mkdirs();
         if (!file.exists()) {
             return;
         }
@@ -163,12 +166,19 @@ public class CorgiManager {
     }
 
     public static void removeTask(String input) {
-        int taskId = Integer.parseInt(input) - 1;
-        Task removedTask = tasks.get(taskId);
-        tasks.remove(taskId);
-        saveTasks();
-        corgiPrint(String.format("Noted. I've removed this task:\n%s%s\n%sYou now have %d tasks in the list.",
-                indent, removedTask.getStatusIcon(), indent, tasks.size()));
+        try {
+            int taskId = Integer.parseInt(input) - 1;
+            Task removedTask = tasks.get(taskId);
+            tasks.remove(taskId);
+            saveTasks();
+            corgiPrint(String.format("Noted. I've removed this task:\n%s%s\n%sYou now have %d tasks in the list.",
+                    indent, removedTask.getStatusIcon(), indent, tasks.size()));
+        } catch (NumberFormatException e) {
+            corgiPrint("Incorrect command format: " + e.getMessage());
+            corgiGuide();
+        } catch (IndexOutOfBoundsException e) {
+            corgiPrint("There is no task with id: " + input);
+        }
     }
 
     public static void addDeadline(String input) {
@@ -183,7 +193,7 @@ public class CorgiManager {
             tasks.add(deadline);
             saveTasks();
 
-            corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+            corgiPrint(String.format("Noted. I've added this task:\n%s%s\n%sYou now have %d tasks in the list.",
                     indent, deadline.getStatusIcon(), indent, tasks.size()));
         } catch (IndexOutOfBoundsException e) {
             corgiPrint("Incorrect command format");
@@ -206,7 +216,7 @@ public class CorgiManager {
             tasks.add(event);
             saveTasks();
 
-            corgiPrint(String.format("Added:\n%s%s\n%sYou now have %d tasks in the list.",
+            corgiPrint(String.format("Noted. I've added this task:\n%s%s\n%sYou now have %d tasks in the list.",
                     indent, event.getStatusIcon(), indent, tasks.size()));
         } catch (IndexOutOfBoundsException e) {
             corgiPrint("Incorrect command format");
@@ -223,7 +233,7 @@ public class CorgiManager {
             corgiPrint("Nice. I 've marked this task as done:\n"
                     + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
-            corgiPrint("Incorrect command format");
+            corgiPrint("Incorrect command format: " + e.getMessage());
             corgiGuide();
         } catch (IndexOutOfBoundsException e) {
             corgiPrint("There is no task with id: " + input);
@@ -240,7 +250,7 @@ public class CorgiManager {
             corgiPrint("Okay. I 've marked this task as undone:\n"
                     + indent + tasks.get(taskIndex).getStatusIcon());
         } catch (NumberFormatException e) {
-            corgiPrint("Incorrect command format");
+            corgiPrint("Incorrect command format: " + e.getMessage());
             corgiGuide();
         } catch (IndexOutOfBoundsException e) {
             corgiPrint("There is no task with id: " + input);
