@@ -40,6 +40,7 @@ public class Parser {
             if (!input[1].contains(" /from ") || !input[1].contains(" /to ")) {
                 throw new IncorrectFormatException("Incorrect command syntax");
             }
+
             return new EventCommand(input[1]);
         });
         COMMANDS.put("delete", input -> {
