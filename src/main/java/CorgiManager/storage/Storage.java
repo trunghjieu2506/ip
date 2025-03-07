@@ -9,12 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.FieldPosition;
 import java.util.ArrayList;
 
 public class Storage {
-    private static String filePath;
-    private static File file;
+    private String filePath;
+    private File file;
     public Storage(String filePath) {
         this.filePath = filePath;
         file = new File(filePath);

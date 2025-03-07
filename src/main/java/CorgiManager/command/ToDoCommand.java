@@ -5,8 +5,6 @@ import CorgiManager.task.ToDo;
 import CorgiManager.tasklist.TaskList;
 import CorgiManager.ui.Ui;
 
-import static CorgiManager.CorgiManager.corgiPrint;
-
 public class ToDoCommand extends Command{
     private String input;
     public ToDoCommand(String input){

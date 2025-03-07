@@ -11,8 +11,6 @@ import CorgiManager.ui.Ui;
 import java.util.ArrayList;
 import java.io.*;
 
-import static CorgiManager.ui.Ui.corgiWelcome;
-
 public class CorgiManager {
     private final Storage storage;
     private TaskList taskList;
@@ -28,12 +26,14 @@ public class CorgiManager {
     }
 
     public void run() {
-        corgiWelcome();
+        Ui.corgiWelcome();
         boolean isExit = false;
         while (!isExit) {
             try {
                 String fullCommand = Ui.readCommand();
                 Command c = Parser.parseCommand(fullCommand);  //parse return a Command object
+                System.out.println(taskList.toString());
+                System.out.println(storage.toString());
                 c.execute(taskList, storage);
                 isExit = c.isExit();
             } catch (IncorrectFormatException e) {

@@ -5,6 +5,6 @@ import CorgiManager.tasklist.TaskList;
 import CorgiManager.ui.Ui;
 
 public abstract class Command {
-    public abstract void execute(TaskList tasks, Storage storage) throws Exception;
+    public abstract void execute(TaskList tasks, Storage storage);
     public abstract boolean isExit();
 }

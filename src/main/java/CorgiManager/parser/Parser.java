@@ -41,7 +41,15 @@ public class Parser {
                 throw new IncorrectFormatException("Incorrect command syntax");
             }
 
-            return new EventCommand(input[1]);
+            int idxStart = input[1].indexOf("/from");
+            int idxEnd = input[1].indexOf("/to");
+
+            String eventName = input[1].substring(0, idxStart).trim();
+            String eventStartTime = input[1].substring(idxStart + 1, idxEnd).trim();
+            eventStartTime = eventStartTime.split(" ")[1];
+            String eventEndTime = input[1].substring(idxEnd).split(" ", 2)[1];
+
+            return new EventCommand(eventName, eventStartTime, eventEndTime);
         });
         COMMANDS.put("delete", input -> {
             if (input.length < 2) {

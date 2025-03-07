@@ -4,7 +4,7 @@ import CorgiManager.storage.Storage;
 import CorgiManager.tasklist.TaskList;
 import CorgiManager.ui.Ui;
 
-public class ListCommand extends Command {
+public class ListCommand extends Command{
     @Override
     public void execute(TaskList taskList, Storage storage) {
         System.out.println(Ui.indent + Ui.partition);
