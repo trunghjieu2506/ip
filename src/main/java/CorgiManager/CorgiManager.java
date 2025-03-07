@@ -32,8 +32,6 @@ public class CorgiManager {
             try {
                 String fullCommand = Ui.readCommand();
                 Command c = Parser.parseCommand(fullCommand);  //parse return a Command object
-                System.out.println(taskList.toString());
-                System.out.println(storage.toString());
                 c.execute(taskList, storage);
                 isExit = c.isExit();
             } catch (IncorrectFormatException e) {

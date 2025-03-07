@@ -5,7 +5,7 @@ import CorgiManager.ui.Ui;
 
 public class ExitCommand extends Command {
     @Override
-    public void execute(TaskList tasks, Storage storage){
+    public void execute(TaskList taskList, Storage storage){
         Ui.corgiPrint("Bye. Hope to see you again soon!");
     }
 
