@@ -9,15 +9,14 @@ import CorgiManager.ui.Ui;
 import java.util.ArrayList;
 
 public class DeleteCommand extends Command{
-    private String input;
-    public DeleteCommand(String input){
-        this.input = input;
+    private int taskId;
+    public DeleteCommand(int taskId) {
+        this.taskId = taskId;
     }
 
     @Override
     public void execute (TaskList taskList, Storage storage) {
         ArrayList<Task> listTask = taskList.getTaskList();
-        int taskId = Integer.parseInt(input) - 1;
         Task removedTask = listTask.get(taskId);
         listTask.remove(taskId);
         storage.saveTasks(listTask);

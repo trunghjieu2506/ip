@@ -6,7 +6,9 @@ import CorgiManager.exception.IncorrectFormatException;
 import CorgiManager.exception.InvalidCommandException;
 import CorgiManager.exception.MissingArgumentException;
 import CorgiManager.task.Event;
+import CorgiManager.task.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,19 +57,22 @@ public class Parser {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'delete' command");
             }
-            return new DeleteCommand(input[1]);
+            int taskId = Integer.parseInt(input[1]) - 1;
+            return new DeleteCommand(taskId);
         });
         COMMANDS.put("mark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'mark' command");
             }
-            return new MarkCommand(input[1]);
+            int taskId = Integer.parseInt(input[1]) - 1;
+            return new MarkCommand(taskId);
         });
         COMMANDS.put("unmark", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'unmark' command");
             }
-            return new UnmarkCommand(input[1]);
+            int taskId = Integer.parseInt(input[1]) - 1;
+            return new UnmarkCommand(taskId);
         });
     }
     public static Command parseCommand(String input) throws InvalidCommandException, MissingArgumentException, IncorrectFormatException {

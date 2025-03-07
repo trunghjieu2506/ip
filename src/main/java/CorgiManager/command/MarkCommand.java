@@ -9,18 +9,17 @@ import CorgiManager.ui.Ui;
 import java.util.ArrayList;
 
 public class MarkCommand extends Command{
-    private String input;
-    public MarkCommand(String input){
-        this.input = input;
+    private int taskId;
+    public MarkCommand(int taskId){
+        this.taskId = taskId;
     }
     @Override
     public void execute (TaskList taskList, Storage storage){
         ArrayList<Task> listTask = taskList.getTaskList();
-        int taskIndex = Integer.parseInt(input) - 1;
-        listTask.get(taskIndex).setDone(true);
+        listTask.get(taskId).setDone(true);
         storage.saveTasks(listTask);
         Ui.corgiPrint("Nice. I 've marked this task as done:\n"
-                + Ui.indent + listTask.get(taskIndex).getStatusIcon());
+                + Ui.indent + listTask.get(taskId).getStatusIcon());
     }
 
     @Override
