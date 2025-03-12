@@ -20,6 +20,12 @@ public class Parser {
     static {
         COMMANDS.put("bye", input -> new ExitCommand());
         COMMANDS.put("list", input -> new ListCommand());
+        COMMANDS.put("find", input -> {
+            if (input.length < 2) {
+                throw new MissingArgumentException("Missing argument for 'find' command");
+            }
+            return new FindCommand(input[1]);
+        });
         COMMANDS.put("todo", input -> {
             if (input.length < 2) {
                 throw new MissingArgumentException("Missing argument for 'todo' command");
