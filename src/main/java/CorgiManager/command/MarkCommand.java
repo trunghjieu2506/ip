@@ -8,11 +8,17 @@ import CorgiManager.ui.Ui;
 
 import java.util.ArrayList;
 
+/**
+ * Marks a specific task as completed.
+ * Updates the task status in the task list, saves the updated list to storage,
+ * and displays a confirmation message to the user.
+ */
 public class MarkCommand extends Command{
     private int taskId;
     public MarkCommand(int taskId){
         this.taskId = taskId;
     }
+
     @Override
     public void execute (TaskList taskList, Storage storage){
         ArrayList<Task> listTask = taskList.getTaskList();

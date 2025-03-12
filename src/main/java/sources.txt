@@ -19,5 +19,4 @@ CorgiManager/command/DeadlineCommand.java
 CorgiManager/command/ExitCommand.java
 CorgiManager/exception/IncorrectFormatException.java
 CorgiManager/exception/InvalidCommandException.java
-CorgiManager/exception/CorgiException.java
 CorgiManager/exception/MissingArgumentException.java

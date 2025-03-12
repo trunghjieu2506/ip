@@ -5,6 +5,10 @@ import CorgiManager.task.ToDo;
 import CorgiManager.tasklist.TaskList;
 import CorgiManager.ui.Ui;
 
+/**
+ * When executed, the task is added to the list, changes are saved to storage,
+ * and a confirmation message is displayed to the user.
+ */
 public class ToDoCommand extends Command{
     private String input;
     public ToDoCommand(String input){
