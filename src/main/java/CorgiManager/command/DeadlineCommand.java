@@ -7,19 +7,15 @@ import CorgiManager.tasklist.TaskList;
 import CorgiManager.ui.Ui;
 
 public class DeadlineCommand extends Command{
-    private String input;
-    public DeadlineCommand(String input){
-        this.input = input;
+    private String deadlineName;
+    private String deadlineTime;
+    public DeadlineCommand(String deadlineName, String deadlineTime){
+        this.deadlineName = deadlineName;
+        this.deadlineTime = deadlineTime;
     }
 
     @Override
     public void execute(TaskList taskList, Storage storage){
-        // handle unchecked exceptions
-        int idx = input.indexOf("/by");
-        String deadlineName = input.substring(0, idx).trim();
-        // split the input into two parts (by and ...)
-        String deadlineTime = input.substring(idx + 1).trim().split(" ", 2)[1];
-
         Deadline deadline = new Deadline(deadlineName, deadlineTime);
         taskList.add(deadline);
         storage.saveTasks(taskList.getTaskList());

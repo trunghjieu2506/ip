@@ -2,6 +2,10 @@ package CorgiManager.ui;
 
 import java.util.Scanner;
 
+/**
+ * User Interface Class
+ * Responsible for formatting the program and receiving user input
+ */
 public class Ui {
     public static final String partition = "--------------------------------------------------------------------------";
     public static final String indent = "     ";
@@ -11,6 +15,7 @@ public class Ui {
         System.out.println("What can I do for you?");
         System.out.println(partition);
     }
+
     public static void corgiPrint(String input) {
         System.out.println(indent + partition);
         System.out.println(indent + input);
