@@ -33,7 +33,8 @@ public class Parser {
         });
         COMMANDS.put("todo", input -> {
             if (input.length < 2) {
-                throw new MissingArgumentException("Missing argument for 'todo' command");
+                throw new MissingArgumentException("Missing argument for" +
+                        " 'todo' command");
             }
             return new ToDoCommand(input[1]);
         });
