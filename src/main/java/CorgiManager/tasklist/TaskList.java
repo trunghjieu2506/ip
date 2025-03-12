@@ -1,7 +1,6 @@
 package CorgiManager.tasklist;
 
 import CorgiManager.task.Task;
-
 import java.util.ArrayList;
 
 public class TaskList {
