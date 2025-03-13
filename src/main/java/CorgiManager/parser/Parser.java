@@ -40,7 +40,7 @@ public class Parser {
         });
         COMMANDS.put("deadline", input -> {
             if (input.length < 2) {
-                throw new MissingArgumentException("Missing argument for 'deadline' command");
+                throw new MissingArgumentException("Missing argument for 'deadline' command\n" + Ui.indent +  "-- deadline <task_name> /by <date>: create a task with a deadline");
             }
             if (!input[1].contains(" /by ")) {
                 throw new IncorrectFormatException("Incorrect command syntax\n" + Ui.indent +  "-- deadline <task_name> /by <date>: create a task with a deadline");
@@ -54,7 +54,7 @@ public class Parser {
         });
         COMMANDS.put("event", input -> {
             if (input.length < 2) {
-                throw new MissingArgumentException("Missing argument for 'event' command");
+                throw new MissingArgumentException("Missing argument for 'event' command\n" + Ui.indent + "-- event <event_name> /from <start_date_time> /to <end_date_time>: create an event");
             }
             if (!input[1].contains(" /from ") || !input[1].contains(" /to ")) {
                 throw new IncorrectFormatException("Incorrect command syntax\n" + Ui.indent + "-- event <event_name> /from <start_date_time> /to <end_date_time>: create an event");

@@ -7,7 +7,8 @@ import java.util.Scanner;
  * Responsible for formatting the program and receiving user input
  */
 public class Ui {
-    public static final String partition = "--------------------------------------------------------------------------";
+//    public static final String partition = "--------------------------------------------------------------------------";
+    public static final String partition = "_________________________________________________________________________________";
     public static final String indent = "     ";
 
     public static void corgiWelcome(){

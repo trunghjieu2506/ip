@@ -60,7 +60,7 @@ public class CorgiManager {
             } catch (NumberFormatException e) {
                 Ui.corgiPrint("Incorrect command syntax. Command expects a number");
             } catch (IndexOutOfBoundsException e) {
-                Ui.corgiPrint("Index out of bounds of task list");
+                Ui.corgiPrint("Task number is out of bounds of task list. Try task number between 1 and " + taskList.size());
             } catch (InvalidCommandException e) {
                 Ui.corgiPrint(e.getMessage());
                 Ui.corgiGuide();
