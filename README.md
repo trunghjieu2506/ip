@@ -18,13 +18,13 @@ CorgiManager is a simple command-line chatbot application that helps you manage 
 3. **Local Storage**
    - Your tasks are saved to a local file `tasks.dat` in a hidden folder named `.corgimanager` in your home directory. CorgiManager automatically loads your tasks upon startup.
 
-**Example commandline prompts**
--- todo <task_name>: add a task to the list
--- list: show list of tasks
--- mark <task_number>: mark a task as done
--- unmark <task_number>: unmark a task
--- deadline <task_name> /by <date>: create a task with a deadline
--- event <event_name> /from <start_date_time> /to <end_date_time>: create an event
+**Example command prompts**
+- todo <task_name>: add a task to the list.
+- list: show list of tasks.
+- mark <task_number>: mark a task as done.
+- unmark <task_number>: unmark a task. 
+- deadline <task_name> /by <date>: create a task with a deadline.
+-event <event_name> /from <start_date_time> /to <end_date_time>: create an event.
 ---
 
 ## Getting Started
