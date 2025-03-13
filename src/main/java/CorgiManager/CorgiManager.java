@@ -2,6 +2,7 @@ package CorgiManager;
 
 import CorgiManager.command.Command;
 import CorgiManager.exception.IncorrectFormatException;
+import CorgiManager.exception.InvalidCommandException;
 import CorgiManager.parser.Parser;
 import CorgiManager.storage.Storage;
 import CorgiManager.task.Task;
@@ -35,7 +36,7 @@ public class CorgiManager {
         try {
             taskList = new TaskList(storage.load());
         } catch (Exception e) {
-            Ui.corgiPrint(e.getMessage());
+            Ui.corgiPrint("Creating a file storage");
             taskList = new TaskList(new ArrayList<Task>());
         }
     }
@@ -60,6 +61,9 @@ public class CorgiManager {
                 Ui.corgiPrint("Incorrect command syntax. Command expects a number");
             } catch (IndexOutOfBoundsException e) {
                 Ui.corgiPrint("Index out of bounds of task list");
+            } catch (InvalidCommandException e) {
+                Ui.corgiPrint(e.getMessage());
+                Ui.corgiGuide();
             } catch (Exception e) {
                 Ui.corgiPrint(e.getMessage());
             }
@@ -75,6 +79,7 @@ public class CorgiManager {
             + File.separator + ".corgimanager" + File.separator + "tasks.dat";
 
     public static void main(String[] args) {
+        System.out.println(LIST_FILE);
         new CorgiManager(LIST_FILE).run();
     }
 }

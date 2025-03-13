@@ -1,6 +1,7 @@
 package CorgiManager.storage;
 
 import CorgiManager.task.Task;
+import CorgiManager.ui.Ui;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +41,7 @@ public class Storage {
             throw new FileNotFoundException();
         }
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+            Ui.corgiPrint("Storage loaded successfully");
             return (ArrayList<Task>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error loading tasks: " + e.getMessage());
