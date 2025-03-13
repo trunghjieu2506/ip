@@ -25,7 +25,7 @@ Prerequisites: JDK 17, update Intellij to the most recent version.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
-#CorgiManager
+# CorgiManager
 
 CorgiManager is a simple command-line chatbot application that helps you manage a todo list. You can add tasks, mark or unmark them as done, delete tasks, and even search your list of tasks by keywords. CorgiManager stores your tasks in a local file so your list remains available the next time you run the application.
 
