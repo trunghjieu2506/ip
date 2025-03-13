@@ -24,7 +24,7 @@ CorgiManager is a simple command-line chatbot application that helps you manage 
 - mark <task_number>: mark a task as done.
 - unmark <task_number>: unmark a task. 
 - deadline <task_name> /by <date>: create a task with a deadline.
--event <event_name> /from <start_date_time> /to <end_date_time>: create an event.
+- event <event_name> /from <start_date_time> /to <end_date_time>: create an event.
 ---
 
 ## Getting Started
